@@ -24,6 +24,33 @@ Change the Kaggle path to the included `Mall_Customers.csv` before running local
 
 There is no standalone application or deployed segmentation API in this repository.
 
+## UML diagrams
+
+### Main workflow
+
+The notebook studies cluster counts and assigns customers to KMeans segments; this is an unsupervised workflow.
+
+```mermaid
+sequenceDiagram
+    participant Notebook as Segmentation notebook
+    participant CSV as Mall customer dataset
+    participant Prep as Feature selection and scaling
+    participant KMeans as sklearn KMeans
+    participant Plots as Cluster diagnostics
+    Notebook->>CSV: Load customer records
+    CSV-->>Notebook: Customer attributes
+    Notebook->>Prep: Select and scale clustering features
+    Prep-->>Notebook: Prepared feature matrix
+    loop Candidate cluster counts
+        Notebook->>KMeans: Fit clusters
+        KMeans-->>Notebook: Labels and inertia
+        Notebook->>Plots: Inspect elbow and silhouette diagnostics
+    end
+    Notebook->>KMeans: Fit selected cluster count
+    KMeans-->>Notebook: Final segment labels
+    Notebook->>Plots: Visualize customer segments
+```
+
 ## Getting started
 
 ```bash
